@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  targetMqttServer: '0.0.0.0',
+  targetMqttPort: 9001,
+  targetMqttClientId: 'angularTest',
+  targetMqttTopic: 'topic/notifPc',
 };
 
 /*
