@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { NotificationService } from './notification.service';
 
@@ -12,14 +12,17 @@ import { NotificationService } from './notification.service';
 export class NotificationComponent implements OnInit {
   lastNotification$: Observable<string>;
   constructor(notificationService: NotificationService) {
-
-    this.lastNotification$ = notificationService.connectAndBind(
-      environment.targetMqttServer,
-      environment.targetMqttPort,
-      environment.targetMqttClientId,
-      environment.targetMqttTopic,
-    );
+    this.lastNotification$ = notificationService
+      .connectAndBind(
+        environment.targetMqttServer,
+        environment.targetMqttPort,
+        environment.targetMqttClientId,
+        environment.targetMqttTopic
+      )
+      .pipe(tap((notif) => new Notification('Notification', { body: notif })));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    Notification.requestPermission();
+  }
 }
